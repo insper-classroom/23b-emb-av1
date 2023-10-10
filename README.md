@@ -15,7 +15,7 @@ Vocês devem desenvolver o firmware como indicado a seguir:
 Filas e semáforos:
 
 - `xBtnSemaphore`: Semáforo que indica que o botão foi apertado
-- `xQueueCoins`: Fila de inteiros que recebe um valor entre [1,3] indicando quantas moedas o jogador ganhou
+- `xQueueCoins`: Fila de inteiros que recebe um valor entre `[1,3]` indicando quantas moedas o jogador ganhou
 
 Tasks:
 
@@ -52,7 +52,15 @@ Podemos pensar em algumas soluções para gerarmos o `seed` do `srand`:
 
 Você deve ter algo como:
 
-`srand(time)`
+```c 
+srand(time)
+
+while(1){
+
+    coins = rand() ....;
+
+}
+```
 
 Onde o `time` é um valor que depende de um tempo externo e que é imprevisível e "único" cada vez. **O `time` deve ser calculado via uso do `RTT`.**
 
@@ -66,7 +74,7 @@ A ideia é reproduzirmos um som similar ao utilizado no jogo do Mário para quan
 
 Ou seja, devemos reproduzir a nota `B` por `1/8` do tempo e então o `E` pelo resto do tempo para geramos o [som da moeda](https://www.youtube.com/watch?v=8OcSYRAhA9k):
 
-```
+```c
 tone(NOTE_B5,  80);
 tone(NOTE_E6, 640);
 ```
@@ -75,8 +83,28 @@ tone(NOTE_E6, 640);
 
 ## Entrega
 
-Um sistema que reproduz que gera aleatóriamente um valor entre `[1, 3]` utilizando um `seed` que é gerado por um evento de tempo externo e calculado pelo `RTT` e que a cada vez que o jogador aperta o botão o sistema reproduz o som da moeda para cada ponto que o jogador ganhou.
+Um sistema é projetado para emitir o som de uma moeda aleatoriamente NN vezes, com NN variando entre os valores de 1 a 3. Para garantir a aleatoriedade na reprodução, o sistema utiliza uma semente (seed) gerada a partir de um evento temporal externo, que é calculado pelo RTT. A cada pressionamento de botão pelo jogador, o sistema emite o som da moeda correspondente ao número de pontos que o jogador acumulou.
 
+### 📋 Check List: Funcionalidade
+
+- [ ] **Reprodução do Som**: Ao apertar o botão, o som da moeda é reproduzido \( N \) vezes.
+- [ ] **Aleatoriedade de \( N \)**: \( N \) é um valor aleatório entre `[1, 3]`.
+- [ ] **Composição do Som**: O som é formado por duas notas distintas fornecidas anteriormente.
+- [ ] **Sequência Aleatória**: A sequência de sons é renovada e aleatória a cada inicialização do sistema.
+
+## 🛠️ Check List: Código
+
+- [ ] **Semente (`seed`)**: A semente é obtida através do `RTT`.
+- [ ] **Tarefas**: O código possui duas tarefas: `task_coin` e `task_play`.
+- [ ] **Inicialização do `srand`**: A `task_coin` inicializa o `srand` com o `seed` assim que disponível.
+- [ ] **Leitura do Semáforo**: A `task_coin` verifica o semáforo `xBtnSemaphore`.
+- [ ] **Geração de Número Aleatório**: A `task_coin` gera um valor aleatório entre `[0, 3]` e envia para a fila `xQueueCoins`.
+- [ ] **Liberação do Semáforo**: O botão libera o semáforo `xBtnSemaphore` ao ser pressionado.
+- [ ] **Recepção da Fila**: A `task_play` lê da fila um valor `n` que varia entre `[0, 3]`.
+- [ ] **Reprodução do Som**: A `task_play` reproduz o som da moeda \( n \) vezes.
+- [ ] **Utilização da Função `tone`**: A `task_play` faz uso da função `tone` para tocar as notas.
+
+<!--
 ### Check list: funcionalidade
 
 - [ ] Cada vez que o botão é apertado reproduz N vezes o som da moeda, onde 
@@ -95,3 +123,4 @@ Um sistema que reproduz que gera aleatóriamente um valor entre `[1, 3]` utiliza
 - [ ] `task_play`: Recebe da fila um valor `n` entre `[0, 3]
 - [ ] `task_play`: Reproduz `n` vez a música da moeda
 - [ ] `task_play`: Faz uso da função `tone`
+-->
