@@ -97,7 +97,8 @@ void btn_init(void) {
 	// Configura PIO para lidar com o pino do botão como entrada
 	// com pull-up
 	pio_configure(BTN_PIO, PIO_INPUT, BTN_PIO_PIN_MASK, PIO_PULLUP | PIO_DEBOUNCE);
-
+	pio_set_debounce_filter(BTN_PIO, BTN_PIO_PIN_MASK, 60);
+	
 	// Configura interrupção no pino referente ao botao e associa
 	// função de callback caso uma interrupção for gerada
 	// a função de callback é a: but_callback()
