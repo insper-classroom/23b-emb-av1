@@ -139,6 +139,8 @@ Um sistema é projetado para emitir o som de uma moeda aleatoriamente N vezes, c
 
 ## 🛠️ Check List: Código
 
+- [ ] Code Quality passando todos os testes!
+
 - [ ] **Semente (`seed`)**: A semente é obtida através do `RTT`.
 - [ ] **Tarefas**: O código possui duas tarefas: `task_coin` e `task_play`.
 - [ ] **Inicialização do `srand`**: A `task_coin` inicializa o `srand` com o `seed` assim que disponível.
