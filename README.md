@@ -2,7 +2,13 @@
 
 Nessa avaliação vocês irão recriar um brinquedo de um jogo de tabuleiro do banco imobiliário do Mário (peguei ideia brincando com os meus filhos), este jogo tem um dispositivo que quando apertado indica sonoramente quantas "moedas" o jogador irá ganhar (de forma aleatória). Toda vez que alguém aperta o botão sons são reproduzidos indicando se o jogador vai ganhar: UMA, DUAS ou TRÊS moedas.
 
+Inspiracão:
+
 https://www.youtube.com/shorts/klZNN5-Mb7w
+
+Entrega final:
+
+https://youtube.com/shorts/FMlfLhubCv4?feature=share
 
 ## Firmware
 
@@ -21,11 +27,13 @@ Tasks:
 
 - `task_coins`: Task que recebe a informação que o botão foi pressionado e calcula quantas moedas o jogador vai ganhar, coloca esta informação na fila `xQueueCoins`.
 - `task_coins`: Task que reproduz o som de acordo com quantas moedas vão ser oferecidas para o jogador.
+- `task_debug`: Uma task que fica piscando uma bola no OLED, se a bolinha parar de piscar quer dizer que o código travou.
 
 Periféricos:
 
 - PIO: Para fazer a leitura do botão e acionar o buzzer.
 - RTT: Vai ser usado para gerar o seed do gerador de números randômicos.
+- UART: Para exibir os valores de debug! 
 
 IRQ:
 
@@ -38,6 +46,8 @@ Seria muito ruim se o dispositivo fornecesse sempre a mesma sequência de moedas
 Para gerarmos uma sequência aleatória, podemos utilizar a função `int rand(void)` disponível na lib `string.h`. Sempre que essa função é acionada, ela devolve um valor "aleatório" entre `0` e `RAND_MAX`. Contudo, o `rand` necessita ser inicializado com uma semente (`seed`) para produzir números distintos a cada inicialização.
 
 > Você vai ter que limitar o resultado do `rand()` para operar entre [1~3].
+>
+> Pesquise no google como fazer isso.
 
 A função `srand(int seed)` é responsável por inicializar o `rand()`, de modo que ele possa gerar sequências verdadeiramente aleatórias a cada vez que é chamado. Se sempre utilizarmos a mesma semente, a função `rand()` produzirá a mesma sequência de números aleatórios a cada inicialização. Portanto, uma prática comum é usar algum evento de tempo como semente (que dificilmente vai se repetir), garantindo assim que a sequência gerada seja diferente em execuções distintas.
 
@@ -50,10 +60,11 @@ Podemos pensar em algumas soluções para gerarmos o `seed` do `srand`:
 1. Tempo em que o sistema ficou ligado até o momento que o botão é apertado pela primeira vez
 1. Tempo em que botão fica pressionado pela primeira vez
 
-Você deve ter algo como:
+No final Você deve ter algo como:
 
 ```c 
-srand(time)
+
+srand(time); // Onde time é um interiro que depende de um fator externo imprevisível.
 
 while(1){
 
@@ -65,6 +76,20 @@ while(1){
 Onde o `time` é um valor que depende de um tempo externo e que é imprevisível e "único" cada vez. **O `time` deve ser calculado via uso do `RTT`.**
 
 **Você pode escolher qual abordagem deseja usar.**
+
+### Debug
+
+Tando para quando o `seed` for gerando quanto para um número de moedas for processado, você deve imprimir no terminal: 
+
+``` c
+Seed : 123131
+Coins: 1
+Coins: 3
+Coins: 3
+...
+...
+
+```
 
 ### Som
 
@@ -80,6 +105,16 @@ tone(NOTE_E6, 640);
 ```
 
 > Você vai precisar usar a sua função `tone()` da APS1 
+
+#### `task_play`
+
+Nesta task vocês devem usar a função `tone` e reproduzir o som da moeda, mas para isso funcionar direito vocês vão precisar aumentar a prioridade da task (por conta do `delay_us` que tem na função). 
+
+**Aumente a prioridade da `task_play` para: **
+
+``` c
+(tskIDLE_PRIORITY + 1)
+```
 
 ## Entrega
 
@@ -98,12 +133,12 @@ Um sistema é projetado para emitir o som de uma moeda aleatoriamente N vezes, c
 - [ ] **Tarefas**: O código possui duas tarefas: `task_coin` e `task_play`.
 - [ ] **Inicialização do `srand`**: A `task_coin` inicializa o `srand` com o `seed` assim que disponível.
 - [ ] **Leitura do Semáforo**: A `task_coin` verifica o semáforo `xBtnSemaphore`.
-- [ ] **Geração de Número Aleatório**: A `task_coin` gera um valor aleatório entre `[0, 3]` e envia para a fila `xQueueCoins`.
+- [ ] **Geração de Número Aleatório**: A `task_coin` gera um valor aleatório entre `[1, 3]` e envia para a fila `xQueueCoins`.
 - [ ] **Liberação do Semáforo**: O botão libera o semáforo `xBtnSemaphore` ao ser pressionado.
-- [ ] **Recepção da Fila**: A `task_play` lê da fila um valor `n` que varia entre `[0, 3]`.
+- [ ] **Recepção da Fila**: A `task_play` lê da fila um valor `n` que varia entre `[1, 3]`.
 - [ ] **Reprodução do Som**: A `task_play` reproduz o som da moeda \( n \) vezes.
 - [ ] **Utilização da Função `tone`**: A `task_play` faz uso da função `tone` para tocar as notas.
-
+- [ ] **Debug no terminal do seed e do número gerado**
 <!--
 ### Check list: funcionalidade
 
