@@ -1,9 +1,10 @@
 # 23b - AV1
 
--     A prova é prática, com o objetivo de avaliar sua compreensão a cerca do conteúdo ministrado pela disciplina.
--     É permitido consulta a todo material pessoal (suas anotações, códigos) e publico (github e internet, copilot e chatgpt), mas não pode consultar outros alunos.
--     Realize um commit a cada 20 minutos!
--     Duração total: 3 horas ( sem choro )
+- A prova é prática, com o objetivo de avaliar sua compreensão a cerca do conteúdo ministrado pela disciplina.
+- É permitido consulta a todo material pessoal (suas anotações, códigos) e publico (github e internet, copilot e chatgpt), mas não pode consultar outros alunos.
+- Realize um commit a cada 20 minutos!
+- Duração total: 3 horas ( sem choro )
+- **A interpretacao do que deve ser feito é parte da avaliação**
 
 ## Ideia
 
