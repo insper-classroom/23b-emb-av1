@@ -8,7 +8,7 @@
 
 ## Ideia
 
-![](https://images-americanas.b2w.io/produtos/6518873631/imagens/jogo-de-tabuleiro-monopoly-junior-mario-hasbro-f4817/6518873631_1_xlarge.jpg)
+![](https://a-static.mlcdn.com.br/1500x1500/jogo-monopoly-junior-super-mario-tabuleiro-hasbro/magazineluiza/235199500/774329db47c5bc7254ba74f21a5d83b3.jpg)
 
 Nessa avaliação vocês irão recriar um brinquedo de um jogo de tabuleiro do banco imobiliário do Mário (peguei ideia brincando com os meus filhos), este jogo tem um dispositivo que quando apertado indica sonoramente quantas "moedas" o jogador irá ganhar (de forma aleatória). Toda vez que alguém aperta o botão sons são reproduzidos indicando se o jogador vai ganhar: UMA, DUAS ou TRÊS moedas.
 
